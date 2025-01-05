@@ -1,6 +1,6 @@
 ![Logo](https://www.cakrawala.ac.id/images/logo-cakrawala-black.png)
 
-# Sistem Manajemen Barbershop
+# Sistem Manajemen Laundry
 
 Sebuah sistem yang dibuat oleh kelompok 10 dari mahasiswa universitas cakrawala untuk tugas algoritma. Dimana sistem ini bekerja untuk membantu UMKM kecil untuk keperluan Manajemen, yang saat ini berfokus di bidang laundry.
 
