@@ -113,8 +113,21 @@ void addOrder()
     }
     cout << "Enter Laundry Weight (kg): ";
     cin >> orderWeights[orderCount];
-    cout << "Enter Service Type (normal/express): ";
-    cin >> orderServiceTypes[orderCount];
+
+    while (true)
+    {
+        cout << "Enter Service Type (normal/express): ";
+        cin >> orderServiceTypes[orderCount];
+        if (orderServiceTypes[orderCount] == "normal" || orderServiceTypes[orderCount] == "express")
+        {
+            break;
+        }
+        else
+        {
+            cout << "Invalid Service Type! Please enter 'normal' or 'express' only.\n";
+        }
+    }
+
     cout << "Enter Total Price: ";
     cin >> orderPrices[orderCount];
     orderStatuses[orderCount] = "Diterima";
