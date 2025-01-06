@@ -153,15 +153,38 @@ void updateOrderStatus()
     }
 }
 
+void printOrderTableHeader()
+{
+    cout << left << setw(15) << "Order Number"
+         << setw(15) << "Customer ID"
+         << setw(10) << "Weight(kg)"
+         << setw(15) << "Service Type"
+         << setw(15) << "Total Price"
+         << setw(15) << "Status" << "\n";
+    cout << string(75, '-') << "\n";
+}
+
 void viewAllOrders()
 {
+    if (orderCount == 0)
+    {
+        cout << "No orders available.\n";
+        return;
+    }
+
     cout << "\nAll Orders:\n";
+    printOrderTableHeader();
+
     for (int i = 0; i < orderCount; ++i)
     {
-        cout << "Order Number: " << orderNumbers[i] << ", Customer ID: " << orderCustomerIds[i]
-             << ", Weight: " << orderWeights[i] << "kg, Service Type: " << orderServiceTypes[i]
-             << ", Total Price: " << orderPrices[i] << ", Status: " << orderStatuses[i] << "\n";
+        cout << left << setw(15) << orderNumbers[i]
+             << setw(15) << orderCustomerIds[i]
+             << setw(10) << orderWeights[i]
+             << setw(15) << orderServiceTypes[i]
+             << setw(15) << fixed << setprecision(2) << orderPrices[i]
+             << setw(15) << orderStatuses[i] << "\n";
     }
+    cout << string(75, '=') << "\n";
 }
 
 void viewActiveOrders()
