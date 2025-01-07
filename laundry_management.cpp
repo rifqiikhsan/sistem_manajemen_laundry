@@ -7,6 +7,7 @@ using namespace std;
 // Constants
 const int MAX_CUSTOMERS = 100;
 const int MAX_ORDERS = 100;
+const int MAX_STATUS_HISTORY = 50;
 
 // Customer data
 string customerIds[MAX_CUSTOMERS];
@@ -23,6 +24,10 @@ string orderServiceTypes[MAX_ORDERS];
 double orderPrices[MAX_ORDERS];
 string orderStatuses[MAX_ORDERS];
 int orderCount = 0;
+
+// Status history data
+string statusHistory[MAX_ORDERS][MAX_STATUS_HISTORY];
+int statusHistoryCount[MAX_ORDERS] = {0};
 
 // Helper functions
 int findCustomerIndexById(string id)
@@ -43,6 +48,19 @@ int findOrderIndexByNumber(string orderNumber)
             return i;
     }
     return -1;
+}
+
+// Function to log status history
+void logStatusHistory(int orderIndex, const string &newStatus)
+{
+    if (statusHistoryCount[orderIndex] < MAX_STATUS_HISTORY)
+    {
+        statusHistory[orderIndex][statusHistoryCount[orderIndex]++] = newStatus;
+    }
+    else
+    {
+        cout << "Status history limit reached for this order.\n";
+    }
 }
 
 // Customer Management
@@ -131,6 +149,7 @@ void addOrder()
     cout << "Enter Total Price: ";
     cin >> orderPrices[orderCount];
     orderStatuses[orderCount] = "Diterima";
+    logStatusHistory(orderCount, "Diterima");
     orderCount++;
     cout << "Order added successfully!\n";
 }
@@ -144,12 +163,49 @@ void updateOrderStatus()
     if (index != -1)
     {
         cout << "Enter new status (Diterima/Dicuci/Selesai): ";
-        cin >> orderStatuses[index];
+        string newStatus;
+        cin >> newStatus;
+        orderStatuses[index] = newStatus;
+        logStatusHistory(index, newStatus);
         cout << "Order status updated successfully!\n";
     }
     else
     {
         cout << "Order not found.\n";
+    }
+}
+
+void viewStatusChangeByOrder()
+{
+    string orderNumber;
+    cout << "Enter Order Number to view status history: ";
+    cin >> orderNumber;
+    int index = findOrderIndexByNumber(orderNumber);
+    if (index != -1)
+    {
+        cout << "\nStatus History for Order Number " << orderNumber << ":\n";
+        for (int i = 0; i < statusHistoryCount[index]; ++i)
+        {
+            cout << i + 1 << ". " << statusHistory[index][i] << "\n";
+        }
+    }
+    else
+    {
+        cout << "Order not found.\n";
+    }
+}
+
+void viewAllStatusChanges()
+{
+    cout << "\nAll Status Changes:\n\n";
+    for (int i = 0; i < orderCount; ++i)
+    {
+        cout << "Order Number: " << orderNumbers[i] << "\n";
+        for (int j = 0; j < statusHistoryCount[i]; ++j)
+        {
+            cout << "  " << j + 1 << ". " << statusHistory[i][j] << "\n";
+        }
+        cout << "\n";
     }
 }
 
@@ -242,7 +298,10 @@ void updateLaundryStatus()
     if (index != -1)
     {
         cout << "Enter new laundry status (Diterima/Dicuci/Selesai): ";
-        cin >> orderStatuses[index];
+        string newStatus;
+        cin >> newStatus;
+        orderStatuses[index] = newStatus;
+        logStatusHistory(index, newStatus);
         cout << "Laundry status updated successfully!\n";
     }
     else
@@ -292,7 +351,7 @@ void adminMenu()
     do
     {
         cout << "\nAdmin Menu:\n";
-        cout << "1. Customer Management\n2. Order Management\n3. View All Orders\n4. Logout\n";
+        cout << "1. Customer Management\n2. Order Management\n3. View All Orders\n4. View Status Change by Order\n5. View All Status Change\n6. Logout\n";
         cout << "Enter your choice: ";
         cin >> choice;
 
@@ -340,12 +399,18 @@ void adminMenu()
             viewAllOrders();
             break;
         case 4:
+            viewStatusChangeByOrder();
+            break;
+        case 5:
+            viewAllStatusChanges();
+            break;
+        case 6:
             cout << "Returning to Role Selection...\n";
             break;
         default:
             cout << "Invalid choice. Try again.\n";
         }
-    } while (choice != 4);
+    } while (choice != 6);
 }
 
 void staffMenu()
